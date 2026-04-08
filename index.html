@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LimPossible - 디지털 명함</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #050508;
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow: hidden;
+}
+
+/* 배경 그리드 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.card-wrapper {
+  perspective: 1200px;
+}
+
+.card {
+  width: 440px;
+  background: linear-gradient(145deg, #0d0d12 0%, #111118 50%, #0a0a0f 100%);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  border-radius: 16px;
+  padding: 36px 32px 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 0 80px rgba(37, 99, 235, 0.06),
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* 상단 글로우 라인 */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 32px;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, #2563eb, #3b82f6, transparent);
+  animation: glowLine 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowLine {
+  from { opacity: 0.6; width: 80px; }
+  to { opacity: 1; width: 120px; }
+}
+
+/* 코너 장식 */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  border-top: 1.5px solid rgba(37, 99, 235, 0.4);
+  border-right: 1.5px solid rgba(37, 99, 235, 0.4);
+}
+
+/* 이름 */
+.name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f0f0f5;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+  animation: typeIn 0.6s 0.3s both;
+}
+
+@keyframes typeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.name span {
+  color: #2563eb;
+}
+
+/* 직함 */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  animation: fadeUp 0.5s 0.5s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.title-row .role {
+  font-size: 12px;
+  font-weight: 500;
+  color: #3b82f6;
+  letter-spacing: 0.5px;
+}
+
+.title-row .divider {
+  width: 1px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.title-row .brand {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* 구분선 */
+.sep {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.2), rgba(37, 99, 235, 0.05), transparent);
+  margin-bottom: 20px;
+}
+
+/* 슬로건 */
+.slogan {
+  font-size: 18px;
+  font-weight: 900;
+  color: #e8e8ed;
+  line-height: 1.5;
+  margin-bottom: 22px;
+  animation: fadeUp 0.5s 0.7s both;
+}
+
+.slogan .highlight {
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 서비스 그리드 */
+.services {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.service {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  padding: 14px 12px;
+  transition: all 0.3s ease;
+  cursor: default;
+  animation: fadeUp 0.5s calc(0.9s + var(--i) * 0.1s) both;
+}
+
+.service:hover {
+  background: rgba(37, 99, 235, 0.06);
+  border-color: rgba(37, 99, 235, 0.2);
+  transform: translateY(-2px);
+}
+
+.service .prompt {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #2563eb;
+  margin-bottom: 4px;
+}
+
+.service .svc-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #d1d5db;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.service .svc-sub {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* 하단 구분선 */
+.sep-bottom {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  margin-bottom: 18px;
+}
+
+/* 연락처 */
+.contact {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  animation: fadeUp 0.5s 1.3s both;
+}
+
+.contact-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.contact-left a, .contact-left span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contact-left a:hover {
+  color: #3b82f6;
+}
+
+.contact-left .kmong {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.contact-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contact-right p {
+  font-size: 10px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+/* 하단 노이즈 오버레이 */
+.noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: 16px;
+}
+</style>
+</head>
+<body>
+<div class="card-wrapper">
+  <div class="card">
+    <div class="noise"></div>
+    
+    <div class="name">Lim<span>Possible</span></div>
+    
+    <div class="title-row">
+      <span class="role">AI 1인 유니콘 빌더</span>
+      <span class="divider"></span>
+      <span class="brand">비개발자AI랩</span>
+    </div>
+    
+    <div class="sep"></div>
+    
+    <div class="slogan">
+      <span class="highlight">대체</span> 될 것인가?<br>
+      <span class="highlight">대체</span> 할 것인가?
+    </div>
+    
+    <div class="services">
+      <div class="service" style="--i:0">
+        <div class="prompt">&gt;_</div>
+        <div class="svc-name">Claude Code</div>
+        <div class="svc-sub">시키는 법</div>
+      </div>
+      <div class="service" style="--i:1">
+        <div class="prompt">&gt;_</div>
+        <div class="svc-name">업무 자동화</div>
+        <div class="svc-sub">맡기는 법</div>
+      </div>
+      <div class="service" style="--i:2">
+        <div class="prompt">&gt;_</div>
+        <div class="svc-name">1인 기업 설계</div>
+        <div class="svc-sub">버는 법</div>
+      </div>
+    </div>
+    
+    <div class="sep-bottom"></div>
+    
+    <div class="contact">
+      <div class="contact-left">
+        <span>010-9026-9584</span>
+        <a href="mailto:limkipyo@gmail.com">limkipyo@gmail.com</a>
+        <a href="https://kmong.com/@LimPossible" class="kmong">kmong.com/@LimPossible</a>
+      </div>
+      <div class="contact-right">
+        <p>비개발자 눈높이로 바라봅니다</p>
+        <p>실무 경력으로 디테일을 잡습니다</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
