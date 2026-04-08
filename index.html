@@ -8,12 +8,30 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+:root {
+  --purple-900: #1a0a2e;
+  --purple-800: #2d1454;
+  --purple-700: #4c1d95;
+  --purple-600: #6d28d9;
+  --purple-500: #7c3aed;
+  --purple-400: #a78bfa;
+  --purple-300: #c4b5fd;
+  --black-deep: #08060e;
+  --black-card: #0e0a18;
+  --black-surface: #150f24;
+  --gray-100: #f0edf5;
+  --gray-300: #c8c2d6;
+  --gray-500: #8b83a0;
+  --gray-600: #6b6280;
+  --gray-700: #4a4360;
+}
+
 body {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #050508;
+  background: var(--black-deep);
   font-family: 'Noto Sans KR', sans-serif;
   overflow: hidden;
 }
@@ -24,9 +42,22 @@ body::before {
   position: fixed;
   inset: 0;
   background-image: 
-    linear-gradient(rgba(37, 99, 235, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* 배경 글로우 오브 */
+body::after {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -36,16 +67,17 @@ body::before {
 
 .card {
   width: 440px;
-  background: linear-gradient(145deg, #0d0d12 0%, #111118 50%, #0a0a0f 100%);
-  border: 1px solid rgba(37, 99, 235, 0.15);
+  background: linear-gradient(145deg, var(--black-surface) 0%, var(--black-card) 50%, #0b0714 100%);
+  border: 1px solid rgba(124, 58, 237, 0.2);
   border-radius: 16px;
   padding: 36px 32px 28px;
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 0 80px rgba(37, 99, 235, 0.06),
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    0 0 100px rgba(124, 58, 237, 0.08),
+    0 0 40px rgba(109, 40, 217, 0.04),
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -54,7 +86,7 @@ body::before {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* 상단 글로우 라인 */
+/* 상단 글로우 라인 - 퍼플 그라데이션 */
 .card::before {
   content: '';
   position: absolute;
@@ -62,7 +94,7 @@ body::before {
   left: 32px;
   width: 80px;
   height: 2px;
-  background: linear-gradient(90deg, #2563eb, #3b82f6, transparent);
+  background: linear-gradient(90deg, var(--purple-600), var(--purple-400), transparent);
   animation: glowLine 2s ease-in-out infinite alternate;
 }
 
@@ -79,8 +111,19 @@ body::before {
   right: 12px;
   width: 8px;
   height: 8px;
-  border-top: 1.5px solid rgba(37, 99, 235, 0.4);
-  border-right: 1.5px solid rgba(37, 99, 235, 0.4);
+  border-top: 1.5px solid rgba(124, 58, 237, 0.4);
+  border-right: 1.5px solid rgba(124, 58, 237, 0.4);
+}
+
+/* 좌하단 코너 장식 */
+.corner-bl {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 1.5px solid rgba(124, 58, 237, 0.25);
+  border-left: 1.5px solid rgba(124, 58, 237, 0.25);
 }
 
 /* 이름 */
@@ -88,7 +131,7 @@ body::before {
   font-family: 'JetBrains Mono', monospace;
   font-size: 28px;
   font-weight: 700;
-  color: #f0f0f5;
+  color: var(--gray-100);
   letter-spacing: -0.5px;
   margin-bottom: 6px;
   animation: typeIn 0.6s 0.3s both;
@@ -100,7 +143,10 @@ body::before {
 }
 
 .name span {
-  color: #2563eb;
+  background: linear-gradient(135deg, var(--purple-500), var(--purple-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* 직함 */
@@ -120,26 +166,26 @@ body::before {
 .title-row .role {
   font-size: 12px;
   font-weight: 500;
-  color: #3b82f6;
+  color: var(--purple-400);
   letter-spacing: 0.5px;
 }
 
 .title-row .divider {
   width: 1px;
   height: 12px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(124, 58, 237, 0.2);
 }
 
 .title-row .brand {
   font-size: 11px;
-  color: #6b7280;
+  color: var(--gray-500);
   font-weight: 400;
 }
 
 /* 구분선 */
 .sep {
   height: 1px;
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.2), rgba(37, 99, 235, 0.05), transparent);
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.3), rgba(124, 58, 237, 0.08), transparent);
   margin-bottom: 20px;
 }
 
@@ -147,14 +193,14 @@ body::before {
 .slogan {
   font-size: 18px;
   font-weight: 900;
-  color: #e8e8ed;
+  color: var(--gray-300);
   line-height: 1.5;
   margin-bottom: 22px;
   animation: fadeUp 0.5s 0.7s both;
 }
 
 .slogan .highlight {
-  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  background: linear-gradient(90deg, var(--purple-500), var(--purple-300));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -169,8 +215,8 @@ body::before {
 }
 
 .service {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(124, 58, 237, 0.03);
+  border: 1px solid rgba(124, 58, 237, 0.08);
   border-radius: 10px;
   padding: 14px 12px;
   transition: all 0.3s ease;
@@ -179,36 +225,37 @@ body::before {
 }
 
 .service:hover {
-  background: rgba(37, 99, 235, 0.06);
-  border-color: rgba(37, 99, 235, 0.2);
+  background: rgba(124, 58, 237, 0.08);
+  border-color: rgba(124, 58, 237, 0.25);
   transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.1);
 }
 
 .service .prompt {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: #2563eb;
+  color: var(--purple-500);
   margin-bottom: 4px;
 }
 
 .service .svc-name {
   font-size: 12px;
   font-weight: 700;
-  color: #d1d5db;
+  color: var(--gray-300);
   margin-bottom: 4px;
   line-height: 1.3;
 }
 
 .service .svc-sub {
   font-size: 11px;
-  color: #6b7280;
+  color: var(--gray-500);
   font-weight: 500;
 }
 
 /* 하단 구분선 */
 .sep-bottom {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.12), transparent);
   margin-bottom: 18px;
 }
 
@@ -229,17 +276,17 @@ body::before {
 .contact-left a, .contact-left span {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  color: #6b7280;
+  color: var(--gray-500);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .contact-left a:hover {
-  color: #3b82f6;
+  color: var(--purple-400);
 }
 
 .contact-left .kmong {
-  color: #2563eb;
+  color: var(--purple-500);
   font-weight: 700;
 }
 
@@ -252,11 +299,11 @@ body::before {
 
 .contact-right p {
   font-size: 10px;
-  color: #4b5563;
+  color: var(--gray-600);
   line-height: 1.5;
 }
 
-/* 하단 노이즈 오버레이 */
+/* 노이즈 오버레이 */
 .noise {
   position: absolute;
   inset: 0;
@@ -270,13 +317,14 @@ body::before {
 <div class="card-wrapper">
   <div class="card">
     <div class="noise"></div>
+    <div class="corner-bl"></div>
     
     <div class="name">Lim<span>Possible</span></div>
     
     <div class="title-row">
       <span class="role">AI 1인 유니콘 빌더</span>
       <span class="divider"></span>
-      <span class="brand">비개발자AI랩</span>
+      <span class="brand">하네스 엔지니어링</span>
     </div>
     
     <div class="sep"></div>
