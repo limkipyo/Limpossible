@@ -1,0 +1,23 @@
+title = "secret-guard baseline (Johan dev standard)"
+
+# gitleaks 기본 룰 전체 사용 + 아래 검증된 false-positive 만 허용.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "문서 플레이스홀더 · env 템플릿 · 검증된 테스트 더미 (2026-06-21 감사 기준)"
+paths = [
+  '''(^|/)\.env\.example$''',
+]
+regexes = [
+  # 명백한 예시/플레이스홀더 토큰
+  '''(?i)\b(YOUR|MY|EXAMPLE|PLACEHOLDER|DUMMY|SAMPLE|CHANGEME|TODO)[_-]?\w*''',
+  '''X{6,}''',
+  '''ob_live_\.\.\.''',
+  '''Bearer\s+(ob_live_\.\.\.|<[^>]+>|\$\{[^}]+\}|YOUR[_-]?\w+)''',
+  # food-seller-os 감사서 검증된 테스트 더미
+  '''test-secret-must-be-at-least-32-chars-long-for-jwt''',
+]
+
+# 주의: tests/ 디렉터리는 통째 allowlist 하지 않는다 — 실키가 테스트에 박히는 경우가 있어
+#       파일별/라인별로 '# gitleaks:allow' 인라인 주석으로 개별 허용할 것.
